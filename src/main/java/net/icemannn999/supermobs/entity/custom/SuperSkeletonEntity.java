@@ -2,16 +2,13 @@ package net.icemannn999.supermobs.entity.custom;
 
 import net.icemannn999.supermobs.entity.ai.SkeletonAttackGoal;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,19 +18,17 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class SkeletonEntity extends Monster {
-    public static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(SkeletonEntity.class, EntityDataSerializers.BOOLEAN);
+public class SuperSkeletonEntity extends Monster {
+    public static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(SuperSkeletonEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public SkeletonEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
+    public SuperSkeletonEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
@@ -123,9 +118,29 @@ public class SkeletonEntity extends Monster {
     {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 40.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.2)
-                .add(Attributes.ATTACK_DAMAGE, 16.0);
+                .add(Attributes.MOVEMENT_SPEED, 0.25)
+                .add(Attributes.ATTACK_DAMAGE, 16.0)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.4);
     }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof IronGolem) {
+            amount *= 0.1F;
+        }
+
+        return super.hurt(source, amount);
+    }
+
+//    @Override
+//    public void performAttack(Entity target) {
+//        float amount = getAttackDamage();e
+//        if (target instanceof IronGolem) {
+//            amount *= 2;
+//        }
+//        target.hurt(DamageSource.mobAttack(this), amount);
+//    }
+
 
     @Nullable
     @Override

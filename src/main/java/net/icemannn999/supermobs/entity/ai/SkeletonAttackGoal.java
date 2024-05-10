@@ -1,28 +1,28 @@
 package net.icemannn999.supermobs.entity.ai;
 
-import net.icemannn999.supermobs.entity.custom.SkeletonEntity;
+import net.icemannn999.supermobs.entity.custom.SuperSkeletonEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class SkeletonAttackGoal extends MeleeAttackGoal {
-    private final SkeletonEntity entity;
-    private int attackDelay = 31;
-    private int ticksUntilNextAttack = 8;
+    private final SuperSkeletonEntity entity;
+    private int attackDelay = 10;
+    private int ticksUntilNextAttack = 5;
     private boolean shouldCountTillNextAttack = false;
 
     public SkeletonAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
         super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
 
-        entity = ((SkeletonEntity) pMob);
+        entity = ((SuperSkeletonEntity) pMob);
     }
 
     @Override
     public void start() {
         super.start();
-        attackDelay = 40;
-        ticksUntilNextAttack = 8;
+        attackDelay = 10;
+        ticksUntilNextAttack = 5;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SkeletonAttackGoal extends MeleeAttackGoal {
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(attackDelay + 22);
+        this.ticksUntilNextAttack = this.adjustedTickDelay(attackDelay + 10);
     }
 
     protected boolean isTimeToAttack() {

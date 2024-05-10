@@ -6,7 +6,7 @@ package net.icemannn999.supermobs.entity.client;// Made with Blockbench 4.10.0
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.icemannn999.supermobs.entity.animations.ModAnimationDefinitions;
-import net.icemannn999.supermobs.entity.custom.SkeletonEntity;
+import net.icemannn999.supermobs.entity.custom.SuperSkeletonEntity;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,7 +14,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-public class SkeletonModel<T extends Entity> extends HierarchicalModel<T> {
+public class SuperSkeletonModel<T extends Entity> extends HierarchicalModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	private final ModelPart superskeleton;
 	private final ModelPart torso;
@@ -43,7 +43,7 @@ public class SkeletonModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart lower_left;
 	private final ModelPart foot_left;
 
-	public SkeletonModel(ModelPart root) {
+	public SuperSkeletonModel(ModelPart root) {
 		this.superskeleton = root.getChild("SuperSkeleton");
 		this.torso = superskeleton.getChild("torso");
 		this.head = torso.getChild("head");
@@ -140,8 +140,8 @@ public class SkeletonModel<T extends Entity> extends HierarchicalModel<T> {
 
 
 		this.animateWalk(ModAnimationDefinitions.WALK, limbSwing, limbSwingAmount, 2f, 1f);
-		this.animate(((SkeletonEntity) entity).idleAnimationState, ModAnimationDefinitions.IDLE, ageInTicks, 1);
-		this.animate(((SkeletonEntity) entity).attackAnimationState, ModAnimationDefinitions.ATTACK, ageInTicks, 1);
+		this.animate(((SuperSkeletonEntity) entity).idleAnimationState, ModAnimationDefinitions.IDLE, ageInTicks, 1);
+		this.animate(((SuperSkeletonEntity) entity).attackAnimationState, ModAnimationDefinitions.ATTACK, ageInTicks, 1);
 
 		float originalRotation = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.5F * limbSwingAmount;
 		this.arm_right_back.xRot = Mth.clamp(originalRotation, -0.1745329F, 0.2617994F);
