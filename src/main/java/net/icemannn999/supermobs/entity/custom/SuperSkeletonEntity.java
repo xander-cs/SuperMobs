@@ -6,11 +6,11 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -19,9 +19,13 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -132,15 +136,73 @@ public class SuperSkeletonEntity extends Monster {
         return super.hurt(source, amount);
     }
 
-//    @Override
-//    public void performAttack(Entity target) {
-//        float amount = getAttackDamage();e
-//        if (target instanceof IronGolem) {
-//            amount *= 2;
-//        }
-//        target.hurt(DamageSource.mobAttack(this), amount);
-//    }
+    @Override
+    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
+        super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
 
+        int bonesToDrop = (3 + this.random.nextInt(8));
+        bonesToDrop += this.random.nextInt(pLooting + 1);
+        this.spawnAtLocation(new ItemStack(Items.BONE, bonesToDrop));
+
+        if (this.random.nextFloat() < 0.5 + 0.05 * pLooting) {
+            this.spawnAtLocation(new ItemStack(Items.BONE_BLOCK, pLooting > 0 ? 2 : 1));
+        }
+
+//        if (this.random.nextFloat() < 0.02 + 0.1 * pLooting) {
+//            this.spawnAtLocation(new ItemStack(ModItems.CUSTOM_GEM, 1));
+//        }
+
+        if (pSource.getEntity() instanceof Creeper creeper) {
+            if (creeper.canDropMobsSkull()) {
+                creeper.increaseDroppedSkulls();
+                this.spawnAtLocation(Items.SKELETON_SKULL);
+            }
+        }
+    }
+
+    @Override
+    protected void setItemSlotAndDropWhenKilled(EquipmentSlot pSlot, ItemStack pStack) {
+        switch(pSlot)
+        {
+            case LEGS, FEET:
+                break;
+            default:
+                this.setItemSlot(pSlot, pStack);
+        }
+    }
+
+    @Override
+    protected void populateDefaultEquipmentEnchantments(RandomSource pRandom, DifficultyInstance pDifficulty) {
+//        if (pRandom.nextFloat() < (this.level().getDifficulty() == Difficulty.HARD ? 0.5F : 0.2F)) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+//        }
+    }
+
+    @Override
+    protected void pickUpItem(ItemEntity pItemEntity) {
+        ItemStack newItem = pItemEntity.getItem();
+
+        if (this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
+            this.setItemSlot(EquipmentSlot.MAINHAND, newItem);
+        } else if (this.getItemBySlot(EquipmentSlot.OFFHAND).isEmpty()) {
+            this.setItemSlot(EquipmentSlot.OFFHAND, newItem);
+        } else if (this.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+            this.setItemSlot(EquipmentSlot.HEAD, newItem);
+        } else if (this.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
+            this.setItemSlot(EquipmentSlot.CHEST, newItem);
+        }
+        pItemEntity.discard();
+    }
+
+    @Override
+    public boolean canHoldItem(ItemStack pStack) {
+        return pStack.getItem() instanceof SwordItem || pStack.getItem() instanceof AxeItem || pStack.getItem() instanceof ShieldItem;
+    }
+
+    @Override
+    public boolean wantsToPickUp(ItemStack pStack) {
+        return pStack.getItem() instanceof SwordItem || pStack.getItem() instanceof AxeItem || pStack.getItem() instanceof ShieldItem;
+    }
 
     @Nullable
     @Override
@@ -161,5 +223,10 @@ public class SuperSkeletonEntity extends Monster {
     protected SoundEvent getDeathSound()
     {
         return SoundEvents.SKELETON_DEATH;
+    }
+
+    public @NotNull MobType getMobType()
+    {
+        return MobType.UNDEAD;
     }
 }

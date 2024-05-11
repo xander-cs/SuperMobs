@@ -12,6 +12,6 @@ public class ModeEventBusEvents {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event)
     {
-        event.put(ModEntities.SKELETON.get(), SuperSkeletonEntity.createAttributes().build());
+        event.put(ModEntities.SUPER_SKELETON.get(), SuperSkeletonEntity.createAttributes().build());
     }
 }

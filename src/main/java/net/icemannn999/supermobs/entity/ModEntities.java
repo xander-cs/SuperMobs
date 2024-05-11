@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SuperMobs.MOD_ID);
 
-    public static final RegistryObject<EntityType<SuperSkeletonEntity>> SKELETON = ENTITY_TYPES.register("mutant_skeleton", () -> EntityType.Builder.of(SuperSkeletonEntity::new, MobCategory.MONSTER).sized(0.5f, 2.5f).build("mutant_skeleton"));
+    public static final RegistryObject<EntityType<SuperSkeletonEntity>> SUPER_SKELETON = ENTITY_TYPES.register("mutant_skeleton", () -> EntityType.Builder.of(SuperSkeletonEntity::new, MobCategory.MONSTER).sized(0.5f, 2.5f).build("mutant_skeleton"));
 
     public static void register(IEventBus eventBus)
     {

@@ -93,7 +93,7 @@ public class SuperMobs
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            EntityRenderers.register(ModEntities.SKELETON.get(), SuperSkeletonRenderer::new);
+            EntityRenderers.register(ModEntities.SUPER_SKELETON.get(), SuperSkeletonRenderer::new);
         }
     }
 }

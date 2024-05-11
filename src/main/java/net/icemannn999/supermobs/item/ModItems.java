@@ -13,7 +13,7 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SuperMobs.MOD_ID);
 
     public static final RegistryObject<Item> SUPER_SKELETON_SPAWN_EGG = ITEMS.register("super_skeleton_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.SKELETON, 10000536, 5395026, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntities.SUPER_SKELETON, 10000536, 5395026, new Item.Properties()));
 
     public static void register(IEventBus eventBus)
     {
